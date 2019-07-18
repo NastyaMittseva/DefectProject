@@ -1,7 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 # Byte-compiled / optimized / DLL files
-__pycache__/
+Demo/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -76,7 +76,7 @@ docs/_build/
 target/
 
 # IPython Notebook
-.ipynb_checkpoints
+Demo/.ipynb_checkpoints
 
 # pyenv
 .python-version
@@ -157,8 +157,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-defect_masks/
-processing_scans/
-scale_weld_area/
-weld_masks/
-models/
+Demo/defect_masks/
+Demo/processing_scans/
+Demo/scale_weld_area/
+Demo/weld_masks/
+Demo/models/
