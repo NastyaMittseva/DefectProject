@@ -21,8 +21,8 @@ class Postprocessor():
     def overlay_mask_on_image(self, path_processing_img, process_img_name, path_results):
         """ Накладывает маску на исходное изображение и сохраняет. """
         processing_image = cv2.imread(path_processing_img + process_img_name)
-        self.scaling_mask[np.where((self.scaling_mask == [0, 0, 0]).all(axis=2))] = [0, 0, 255]
-        self.scaling_mask[np.where((self.scaling_mask == [255, 255, 255]).all(axis=2))] = [255, 255, 0]
+        self.scaling_mask[np.where((self.scaling_mask == [0, 0, 0]).all(axis=2))] = [255, 0, 0]
+        self.scaling_mask[np.where((self.scaling_mask == [255, 255, 255]).all(axis=2))] = [0, 255, 255]
         result = cv2.addWeighted(self.scaling_mask, self.alpha, processing_image, 1 - self.alpha, 0)
         cv2.imwrite(path_results + process_img_name, result)
         return result
