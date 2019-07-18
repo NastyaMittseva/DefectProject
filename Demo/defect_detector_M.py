@@ -15,7 +15,7 @@ class DefectDetector():
         После конвертирует вероятностную маску в бинарную и сохраняет ее.
     """
     def __init__(self):
-        self.model_path = './models/defectSegmentation/FgSegNet_M/mdl_defects_dataset_v3_50-0.01.h5'
+        self.model_path = './models/defectSegmentation/FgSegNet_M/FgSegNet_M_defect_segmentation.h5'
         self.threshold = 0.45
         self.s1 = []
         self.s2 = []

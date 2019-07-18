@@ -14,7 +14,7 @@ class WeldSegmentator_FgSegNet_v2():
         После преобразует вероятностную маску в бинарную маску и сохраняет.
     """
     def __init__(self):
-        self.model_path = './models/weldSegmentation/FgSegNet_v2/v2_mdl_welds_Dataset_v4_30epoch.h5'
+        self.model_path = './models/weldSegmentation/FgSegNet_v2/FgSegNet_v2_weld_segmentation.h5'
         self.threshold = 0.5
         self.X = None
         self.probs = None
