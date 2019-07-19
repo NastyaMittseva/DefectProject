@@ -3,7 +3,6 @@ import cv2
 from keras.preprocessing import image
 from keras.models import load_model
 from instance_normalization import InstanceNormalization
-from my_upsampling_2d_v2 import MyUpSampling2D
 from FgSegNet_v2_module import loss, acc, loss2, acc2
 from clear_memory import reset_keras
 
@@ -28,8 +27,7 @@ class WeldSegmentator_FgSegNet_v2():
 
     def predict_weld_mask(self):
         """ Предсказывает вероятностную маску шва. """
-        model = load_model(self.model_path, custom_objects={'MyUpSampling2D': MyUpSampling2D,
-                                                            'InstanceNormalization': InstanceNormalization,
+        model = load_model(self.model_path, custom_objects={'InstanceNormalization': InstanceNormalization,
                                                             'loss': loss, 'acc': acc, 'loss2': loss2,
                                                             'acc2': acc2})
         self.probs = model.predict(self.X, batch_size=1, verbose=1)

@@ -3,7 +3,6 @@ import cv2
 from keras.preprocessing import image as kImage
 from skimage.transform import pyramid_gaussian
 from keras.models import load_model
-from my_upsampling_2d_S_M import MyUpSampling2D
 from FgSegNet_M_S_module import loss, acc
 from clear_memory import reset_keras
 
@@ -37,7 +36,7 @@ class DefectDetector():
 
     def predict_defect_mask(self):
         """ Предсказывает вероятностную маску дефектов. """
-        model = load_model(self.model_path, custom_objects={'MyUpSampling2D': MyUpSampling2D, 'loss': loss, 'acc': acc})
+        model = load_model(self.model_path, custom_objects={'loss': loss, 'acc': acc})
         data = [self.s1, self.s2, self.s3]
         self.probs = model.predict(data, batch_size=1, verbose=1)
         self.probs = self.probs.reshape([self.probs.shape[0], self.probs.shape[1], self.probs.shape[2]])

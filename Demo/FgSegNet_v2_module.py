@@ -12,8 +12,6 @@ from keras.layers import Input, Dropout, Activation, SpatialDropout2D
 from keras.layers.convolutional import Conv2D, Cropping2D, UpSampling2D
 from keras.layers.pooling import MaxPooling2D, GlobalAveragePooling2D
 from keras.layers import concatenate, add, multiply
-from my_upsampling_2d_S_M import MyUpSampling2D
-from instance_normalization import InstanceNormalization
 import keras.backend as K
 import tensorflow as tf
 
@@ -131,7 +129,6 @@ class FgSegNet_v2_module(object):
         return x
     
     def initModel(self, dataset_name):
-        assert dataset_name in ['CDnet', 'SBI', 'UCSD'], 'dataset_name must be either one in ["CDnet", "SBI", "UCSD"]]'
         assert len(self.img_shape)==3
         h, w, d = self.img_shape
         
@@ -146,50 +143,15 @@ class FgSegNet_v2_module(object):
                 layer.trainable = False
                 
         x,a,b = model.output
-        
-        # pad in case of CDnet2014
-        if dataset_name=='CDnet':
-            x1_ups = {'streetCornerAtNight':(0,1), 'tramStation':(1,0), 'turbulence2':(1,0)}
-            for key, val in x1_ups.items():
-                if self.scene==key:
-                    # upscale by adding number of pixels to each dim.
-                    x = MyUpSampling2D(size=(1,1), num_pixels=val, method_name = self.method_name)(x)
-                    break
                 
         x = self.M_FPM(x)
         x = self.decoder(x,a,b)
         
-        # pad in case of CDnet2014
-        if dataset_name=='CDnet':
-            if(self.scene=='tramCrossroad_1fps'):
-                x = MyUpSampling2D(size=(1,1), num_pixels=(2,0), method_name=self.method_name)(x)
-            elif(self.scene=='bridgeEntry'):
-                x = MyUpSampling2D(size=(1,1), num_pixels=(2,2), method_name=self.method_name)(x)
-            elif(self.scene=='fluidHighway'):
-                x = MyUpSampling2D(size=(1,1), num_pixels=(2,0), method_name=self.method_name)(x)
-            elif(self.scene=='streetCornerAtNight'): 
-                x = MyUpSampling2D(size=(1,1), num_pixels=(1,0), method_name=self.method_name)(x)
-                x = Cropping2D(cropping=((0, 0),(0, 1)))(x)
-            elif(self.scene=='tramStation'):  
-                x = Cropping2D(cropping=((1, 0),(0, 0)))(x)
-            elif(self.scene=='twoPositionPTZCam'):
-                x = MyUpSampling2D(size=(1,1), num_pixels=(0,2), method_name=self.method_name)(x)
-            elif(self.scene=='turbulence2'):
-                x = Cropping2D(cropping=((1, 0),(0, 0)))(x)
-                x = MyUpSampling2D(size=(1,1), num_pixels=(0,1), method_name=self.method_name)(x)
-            elif(self.scene=='turbulence3'):
-                x = MyUpSampling2D(size=(1,1), num_pixels=(2,0), method_name=self.method_name)(x)
-
         vision_model = Model(inputs=net_input, outputs=x, name='vision_model')
         opt = keras.optimizers.RMSprop(lr = self.lr, rho=0.9, epsilon=1e-08, decay=0.)
         
-        # Since UCSD has no void label, we do not need to filter out
-        if dataset_name == 'UCSD':
-            c_loss = loss2
-            c_acc = acc2
-        else:
-            c_loss = loss
-            c_acc = acc
+        c_loss = loss
+        c_acc = acc
         
         vision_model.compile(loss=c_loss, optimizer=opt, metrics=[c_acc])
         return vision_model

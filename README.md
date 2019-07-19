@@ -13,7 +13,7 @@
 FgSegNet представляет собой структуру кодер-декодер и предназначена для решения задач бинарной сегментации. 
 
 В данном проекте для сегментации области шва использовалась [FgSegNet_v2](https://github.com/lim-anggun/FgSegNet_v2), а для распознавания
-дефектов - [FgSegNet_M](https://github.com/lim-anggun/FgSegNet2) с точностью распознавания 0.9983 и 0.9958 соответсвенно по метрике binary accuracy. 
+дефектов - [FgSegNet_M](https://github.com/lim-anggun/FgSegNet) с точностью распознавания 0.9983 и 0.9958 соответсвенно по метрике binary accuracy. 
 
 Скачать веса обученных моделей можно по [ссылке](https://drive.google.com/drive/folders/1mSeh2Ln2sGHOjlOMS-zrUH9IRtfb_cRv). 
 Затем их необходимо добавить в директории, соблюдая следующую структуру.
